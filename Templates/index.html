@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎉 YOU ARE PRANKED! 🎉</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            padding: 10px;
+        }
+
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 900px;
+            width: 100%;
+            animation: slideIn 0.8s ease-out;
+            position: relative;
+            z-index: 100;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .prank-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .prank-header h1 {
+            font-size: 3rem;
+            color: #ff6b6b;
+            text-shadow: 3px 3px 0px rgba(255, 107, 107, 0.3);
+            animation: bounce 2s infinite;
+            margin-bottom: 10px;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .emoji-rain {
+            font-size: 2.5rem;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            animation: float 3s ease-in-out infinite;
+            flex-wrap: wrap;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .joke-counter {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 15px 0;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .joke-counter .type {
+            color: #ffd700;
+            font-size: 1.3rem;
+            text-transform: uppercase;
+        }
+
+        .joke-section {
+            background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border-left: 5px solid #e17055;
+        }
+
+        .joke-setup {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #d63031;
+            cursor: pointer;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 8px;
+            transition: all 0.3s;
+            margin-bottom: 15px;
+        }
+
+        .joke-setup:hover {
+            transform: scale(1.05);
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .joke-punchline {
+            font-size: 1.5rem;
+            color: #2d3436;
+            font-weight: bold;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 15px;
+            border-radius: 10px;
+            animation: popIn 0.5s ease-out;
+        }
+
+        @keyframes popIn {
+            0% { opacity: 0; transform: scale(0.5); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        .meme-section {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .meme-section h2 {
+            color: #d63031;
+            margin-bottom: 15px;
+            font-size: 1.8rem;
+        }
+
+        .meme-section img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+
+        .meme-section img:hover {
+            transform: scale(1.05) rotate(1deg);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+
+        button {
+            padding: 12px 20px;
+            font-size: 0.95rem;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-prev {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-prev:hover {
+            transform: translateY(-3px);
+        }
+
+        .btn-next {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+
+        .btn-next:hover {
+            transform: translateY(-3px);
+        }
+
+        .btn-prank {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+        }
+
+        .btn-prank:hover {
+            transform: translateY(-3px);
+        }
+
+        .btn-jumpscare {
+            background: linear-gradient(135deg, #000 0%, #333 100%);
+            color: #ff0000;
+            font-weight: 900;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .btn-jumpscare:hover {
+            transform: translateY(-3px) scale(1.1);
+            background: linear-gradient(135deg, #ff0000 0%, #cc0000 100%);
+        }
+
+        .jumpscare-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .jumpscare-modal.show {
+            display: flex;
+        }
+
+        .jumpscare-content {
+            position: relative;
+            animation: jumpscare-zoom 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        @keyframes jumpscare-zoom {
+            0% { transform: scale(0) rotate(-180deg); }
+            100% { transform: scale(1) rotate(0deg); }
+        }
+
+        .jumpscare-content img {
+            max-width: 90vw;
+            max-height: 90vh;
+            border-radius: 20px;
+            box-shadow: 0 0 50px #ff0000;
+            filter: brightness(1.3);
+        }
+
+        .jumpscare-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 4rem;
+            font-weight: 900;
+            color: #ff0000;
+            text-shadow: 0 0 20px rgba(255, 0, 0, 0.8);
+            animation: jumpscare-text-appear 0.8s ease-out;
+            z-index: 10001;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 30px;
+            border-radius: 20px;
+            border: 5px solid #ff0000;
+        }
+
+        @keyframes jumpscare-text-appear {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+            100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        }
+
+        .prank-response {
+            background: #ffe66d;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #d63031;
+            margin: 20px 0;
+            animation: shake 0.5s ease-in-out;
+            border: 3px solid #d63031;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .confetti {
+            position: fixed;
+            pointer-events: none;
+            animation: confettiFall 3s linear forwards;
+            z-index: 9999;
+        }
+
+        @keyframes confettiFall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .stats-box {
+            background: linear-gradient(135deg, #ff9a56 0%, #ff6b9d 100%);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            color: white;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+
+        .stats-value {
+            font-size: 1.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .neon-text {
+            text-shadow: 0 0 10px #ff00de, 0 0 20px #ff00de;
+            animation: neonGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes neonGlow {
+            0%, 100% { text-shadow: 0 0 10px #ff00de, 0 0 20px #ff00de; }
+            50% { text-shadow: 0 0 20px #ff00de, 0 0 30px #ff00de, 0 0 40px #ff00de; }
+        }
+
+        @media (max-width: 600px) {
+            .container { padding: 20px; }
+            .prank-header h1 { font-size: 2rem; }
+            button { padding: 10px 15px; font-size: 0.8rem; }
+            .button-group { gap: 5px; }
+            .joke-section { padding: 15px; }
+            .jumpscare-text { font-size: 2.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <div id="canvas-container"></div>
+
+    <div class="container">
+        <div class="prank-header">
+            <div class="emoji-rain">
+                🎉 🤪 😂 🎊 🤡 🎭 🚀 💥 ❤️ 💕
+            </div>
+            <h1 class="neon-text">🎯 JOKES & PRANKS 🎯</h1>
+        </div>
+
+        <div class="joke-counter">
+            <div class="type" id="joke-type">Romantic Jokes</div>
+            <div id="joke-progress">Joke 1 / 10</div>
+        </div>
+
+        <div class="stats-box">
+            <h4>PRANK STATS</h4>
+            <div class="stats-value">
+                Pranks: <span id="prank-count">0</span>
+            </div>
+        </div>
+
+        <div class="joke-section">
+            <div class="joke-setup" onclick="revealPunchline()">
+                ❓ {{ joke.setup }}
+            </div>
+            <div id="punchline" class="joke-punchline" style="display: none;">
+                ✨ {{ joke.punchline }}
+            </div>
+            <p style="text-align: center; color: #636e72; margin-top: 10px; font-size: 0.9rem;">
+                👆 Click to reveal punchline! 👆
+            </p>
+        </div>
+
+        <div class="button-group">
+            <button class="btn-prev" onclick="previousJoke()">⬅️ PREVIOUS</button>
+            <button class="btn-next" onclick="nextJoke()">NEXT ➡️</button>
+            <button class="btn-prank" onclick="executePrank()">🎪 PRANK ME!</button>
+            <button class="btn-jumpscare" onclick="triggerJumpscare()">⚠️ DANGER!</button>
+        </div>
+
+        <div class="meme-section">
+            <h2>😂 MEME:</h2>
+            <img id="meme-img" src="{{ meme }}" alt="Meme" onclick="triggerJumpscare()">
+            <p style="color: #636e72; cursor: pointer; margin-top: 10px;" onclick="triggerJumpscare()">
+                👆 Click meme for SURPRISE! 👆
+            </p>
+        </div>
+
+        <div id="response"></div>
+    </div>
+
+    <div id="jumpscare-modal" class="jumpscare-modal">
+        <div class="jumpscare-content">
+            <img id="jumpscare-img" src="" alt="Jumpscare">
+            <div class="jumpscare-text">YOU ARE FOOLED! 😈</div>
+        </div>
+    </div>
+
+    <script>
+        // 3D Setup
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x667eea);
+
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setClearColor(0x000000, 0.1);
+        document.getElementById('canvas-container').appendChild(renderer.domElement);
+
+        camera.position.z = 5;
+
+        const geometry = new THREE.BoxGeometry();
+        const material = new THREE.MeshPhongMaterial({ color: 0xff00ff, shininess: 100 });
+
+        const cubes = [];
+        for (let i = 0; i < 5; i++) {
+            const cube = new THREE.Mesh(geometry, material.clone());
+            cube.position.x = (Math.random() - 0.5) * 20;
+            cube.position.y = (Math.random() - 0.5) * 20;
+            cube.position.z = (Math.random() - 0.5) * 20;
+            cube.rotation.x = Math.random() * Math.PI;
+            cube.rotation.y = Math.random() * Math.PI;
+            scene.add(cube);
+            cubes.push(cube);
+        }
+
+        const light = new THREE.PointLight(0xffffff, 1);
+        light.position.set(10, 10, 10);
+        scene.add(light);
+
+        const ambientLight = new THREE.AmbientLight(0x404040);
+        scene.add(ambientLight);
+
+        function animate() {
+            requestAnimationFrame(animate);
+            cubes.forEach(cube => {
+                cube.rotation.x += 0.005;
+                cube.rotation.y += 0.01;
+            });
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // Confetti
+        function createConfetti() {
+            const colors = ['🎉', '🎊', '🎈', '⭐', '✨', '🎁', '❤️', '💕', '💑'];
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.style.left = Math.random() * window.innerWidth + 'px';
+                confetti.style.top = '-10px';
+                confetti.textContent = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.fontSize = '2rem';
+                confetti.style.position = 'fixed';
+                confetti.style.pointerEvents = 'none';
+                confetti.style.animation = `confettiFall ${2 + Math.random()}s linear forwards`;
+                confetti.style.zIndex = '9999';
+                document.body.appendChild(confetti);
+                setTimeout(() => confetti.remove(), 2500);
+            }
+        }
+
+        // Next Joke
+        function nextJoke() {
+            fetch('/next-joke')
+            .then(response => response.json())
+            .then(data => {
+                document.querySelector('.joke-setup').textContent = '❓ ' + data.joke.setup;
+                document.getElementById('punchline').textContent = '✨ ' + data.joke.punchline;
+                document.getElementById('punchline').style.display = 'none';
+                document.getElementById('joke-type').textContent = data.type.toUpperCase() + ' JOKES';
+                document.getElementById('joke-progress').textContent = `Joke ${data.index + 1} / ${data.progress.split(' / ')[1]}`;
+                createConfetti();
+            });
+        }
+
+        // Previous Joke
+        function previousJoke() {
+            fetch('/previous-joke')
+            .then(response => response.json())
+            .then(data => {
+                document.querySelector('.joke-setup').textContent = '❓ ' + data.joke.setup;
+                document.getElementById('punchline').textContent = '✨ ' + data.joke.punchline;
+                document.getElementById('punchline').style.display = 'none';
+                document.getElementById('joke-type').textContent = data.type.toUpperCase() + ' JOKES';
+                document.getElementById('joke-progress').textContent = `Joke ${data.index + 1} / ${data.progress.split(' / ')[1]}`;
+                createConfetti();
+            });
+        }
+
+        // Reveal Punchline
+        function revealPunchline() {
+            document.getElementById('punchline').style.display = 'block';
+        }
+
+        // Prank
+        function executePrank() {
+            createConfetti();
+            fetch('/prank-button', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('response').innerHTML = `<div class="prank-response">${data.message}</div>`;
+                document.getElementById('prank-count').textContent = data.prank_count;
+                setTimeout(() => { document.getElementById('response').innerHTML = ''; }, 3000);
+            });
+        }
+
+        // Jumpscare
+        function triggerJumpscare() {
+            fetch('/jumpscare')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('jumpscare-img').src = data.jumpscare_url;
+                document.getElementById('jumpscare-modal').classList.add('show');
+                
+                for (let i = 0; i < 100; i++) {
+                    createConfetti();
+                }
+
+                setTimeout(() => {
+                    document.getElementById('jumpscare-modal').classList.remove('show');
+                }, 3000);
+            });
+        }
+
+        window.addEventListener('load', function() {
+            document.getElementById('punchline').style.display = 'block';
+            createConfetti();
+        });
+    </script>
+</body>
+</html>
